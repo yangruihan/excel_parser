@@ -71,7 +71,7 @@ class ExcelParser:
                         "name": "pos_z",
                         "type": "int32",
                         "col": 7,
-                        "comment": " @z1"
+                        "comment": " @z"
                     }
                 ],
                 "comment": " @结构体声明"
@@ -97,7 +97,7 @@ class ExcelParser:
                         "name": "pos_empty_z",
                         "type": "int32",
                         "col": 117,
-                        "comment": " @z1"
+                        "comment": " @z"
                     }
                 ],
                 "comment": " @结构体声明"
@@ -178,7 +178,7 @@ class ExcelParser:
                         "name": "pos_z",
                         "type": "int32",
                         "col": 7,
-                        "comment": " @z1"
+                        "comment": " @z"
                     }
                 ],
                 "comment": " @结构体声明"
@@ -204,7 +204,7 @@ class ExcelParser:
                         "name": "pos_empty_z",
                         "type": "int32",
                         "col": 117,
-                        "comment": " @z1"
+                        "comment": " @z"
                     }
                 ],
                 "comment": " @结构体声明"
