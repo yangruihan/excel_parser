@@ -264,7 +264,9 @@ class ExcelParser:
                         ret['struct_type'].append(sub_type)
                         handle_count += 1
 
-                    return ret, self._get_next(sheet, temp_col)
+                    item_cnt = temp_col - col - 2
+
+                    return ret, self._get_next(sheet, col + 1 + item_cnt * arr_count)
                 else:
                     ret = {
                         'name': next_name,
