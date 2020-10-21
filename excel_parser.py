@@ -11,7 +11,7 @@ STRUCT_TYPE_KEYS = ['required_struct', 'optional_struct']
 
 class ExcelParser:
 
-    def parse_class(self, excel_path: str, sheet_idx: str or int, start_col: int, end_col: int, max_element: int = sys.maxsize) -> list:
+    def parse_class(self, excel_path: str, sheet_idx: str or int, start_col: int, end_col: int = -1, max_element: int = sys.maxsize) -> list:
         """
         用字典描述的 Excel 定义的结构
 
@@ -71,7 +71,7 @@ class ExcelParser:
                         "name": "pos_z",
                         "type": "int32",
                         "col": 7,
-                        "comment": " @z"
+                        "comment": " @z1"
                     }
                 ],
                 "comment": " @结构体声明"
@@ -107,19 +107,21 @@ class ExcelParser:
 
         book = xlrd.open_workbook(excel_path)
         sheet = None
-        if type(sheet_idx) == 'int':
+        if isinstance(sheet_idx, int):
             sheet = book.get_sheet(sheet_idx)
-        elif type(sheet_idx) == 'str':
+        elif isinstance(sheet_idx, str):
             for s in book.sheets():
-                if s.name == sheet_idx:
+                if s.name.strip() == sheet_idx.strip():
                     sheet = s
                     break
 
-        assert(sheet, "Sheet not found!")
+        if sheet is None:
+            print('Sheet not found')
+            return
 
         return self.parse_class_with_sheet(sheet, start_col, end_col, max_element)
 
-    def parse_class_with_sheet(self, sheet: xlrd.sheet.Sheet, start_col: int, end_col: int, max_element: int = sys.maxsize) -> list:
+    def parse_class_with_sheet(self, sheet: xlrd.sheet.Sheet, start_col: int, end_col: int = -1, max_element: int = sys.maxsize) -> list:
         """
         用字典描述的 Excel 定义的结构
 
@@ -204,13 +206,16 @@ class ExcelParser:
                         "name": "pos_empty_z",
                         "type": "int32",
                         "col": 117,
-                        "comment": " @z"
+                        "comment": " @z1"
                     }
                 ],
                 "comment": " @结构体声明"
             }
         ]
         """
+
+        if end_col == -1:
+            end_col = sheet.ncols - 1
 
         class_define = []
 
@@ -257,9 +262,9 @@ class ExcelParser:
                     while handle_count < struct_element_count:
                         sub_type, temp_col = self._parse_col(sheet, temp_col)
                         ret['struct_type'].append(sub_type)
-                        handle_count = handle_count + 1
+                        handle_count += 1
 
-                    return ret, self._get_next(sheet, col + 1 + struct_element_count * arr_count)
+                    return ret, self._get_next(sheet, temp_col)
                 else:
                     ret = {
                         'name': next_name,
