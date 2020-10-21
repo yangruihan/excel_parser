@@ -275,7 +275,7 @@ class ExcelParser:
                         'comment': next_comment
                     }
 
-                    return ret, self._get_next(sheet, col + 1 + arr_count)
+                    return ret, self._get_next(sheet, col + arr_count)
             else:
                 return {
                     'name': name,
