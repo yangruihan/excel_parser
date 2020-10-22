@@ -10,8 +10,29 @@ STRUCT_TYPE_KEYS = ['required_struct', 'optional_struct']
 
 
 class ExcelParser:
+    """
+    Excel 解析器
+    """
 
-    def parse_class(self, excel_path: str, sheet_idx: str or int, start_col: int, end_col: int = -1, max_element: int = sys.maxsize) -> list:
+    def parse_all_sheet(self, excel_path: str) -> list:
+        """
+        解析所有 Excel 表里所有 Sheet
+        返回用字典描述的 Excel 定义结构数组
+
+        Args:
+            excel_path: excel 路径
+
+        Returns:
+            返回一个数组
+            包含若干个 parse 方法返回的数组结构
+        """
+        ret = []
+        book = xlrd.open_workbook(excel_path)
+        for sheet in book.sheets():
+            ret.append(self.parse_with_sheet(sheet, 0))
+        return ret
+
+    def parse(self, excel_path: str, sheet_idx: str or int, start_col: int, end_col: int = -1, max_element: int = sys.maxsize) -> list:
         """
         用字典描述的 Excel 定义的结构
 
@@ -24,7 +45,7 @@ class ExcelParser:
 
         Returns:
 
-            返回一个数组和一个整型
+            返回一个数组
 
             数组：
             表示指定范围内所包含的类型的数组
@@ -119,9 +140,9 @@ class ExcelParser:
             print('Sheet not found')
             return
 
-        return self.parse_class_with_sheet(sheet, start_col, end_col, max_element)
+        return self.parse_with_sheet(sheet, start_col, end_col, max_element)
 
-    def parse_class_with_sheet(self, sheet: xlrd.sheet.Sheet, start_col: int, end_col: int = -1, max_element: int = sys.maxsize) -> list:
+    def parse_with_sheet(self, sheet: xlrd.sheet.Sheet, start_col: int, end_col: int = -1, max_element: int = sys.maxsize) -> list:
         """
         用字典描述的 Excel 定义的结构
 
@@ -133,7 +154,7 @@ class ExcelParser:
 
         Returns:
 
-            返回一个数组和一个整型
+            返回一个数组
 
             数组：
             表示指定范围内所包含的类型的数组
